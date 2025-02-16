@@ -3,7 +3,8 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.llms import OpenAI
 
 # Inisialisasi model LLM
-llm = OpenAI()
+OPENAI_API_KEY = "your-api-key"
+llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 
 # Inisialisasi search tool
 search_tool = DuckDuckGoSearchRun()
@@ -25,8 +26,10 @@ agent = initialize_agent(
     tools=tools, llm=llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
 )
 
-# Menjalankan agent dengan input pengguna
-user_input = "Calculate 8 * 12 and search latest Python updates"
-response = agent.run(user_input)
+if __name__ == "__main__":
 
-print("Agent Response:\n", response)
+    # Menjalankan agent dengan input pengguna
+    user_input = "Calculate 8 * 12 and search latest Python updates"
+    response = agent.run(user_input)
+
+    print("Agent Response:\n", response)

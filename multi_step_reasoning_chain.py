@@ -3,7 +3,7 @@ from langchain.tools import tool
 from langchain.agents import initialize_agent, AgentType
 
 
-# 🔹 1. Tool untuk Mencari Informasi
+# Tool untuk Mencari Informasi
 @tool
 def search_information(query: str) -> str:
     """Mencari informasi berdasarkan kata kunci yang diberikan."""
@@ -15,7 +15,7 @@ def search_information(query: str) -> str:
     return search_results.get(query, "Informasi tidak ditemukan.")
 
 
-# 🔹 2. Tool untuk Menganalisis dan Merangkum Informasi
+# Tool untuk Menganalisis dan Merangkum Informasi
 @tool
 def summarize_information(info: str) -> str:
     """Meringkas informasi utama dari hasil pencarian."""
@@ -29,7 +29,7 @@ def summarize_information(info: str) -> str:
         return "Informasi tidak tersedia untuk diringkas."
 
 
-# 🔹 3. Tool untuk Membuat Laporan
+# Tool untuk Membuat Laporan
 @tool
 def generate_report(topic: str, summary: str) -> str:
     """Membuat laporan singkat berdasarkan hasil ringkasan."""
@@ -39,12 +39,12 @@ def generate_report(topic: str, summary: str) -> str:
     return report
 
 
-# 🔹 4. Inisialisasi Model OpenAI
-llm = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0)
-
-
-# 🔹 5. Chain: Pencarian → Ringkasan → Laporan
+# Chain: Pencarian → Ringkasan → Laporan
 def run_agent(topic: str):
+    # Inisialisasi Model OpenAI
+    OPENAI_API_KEY = "your-api-key"
+    llm = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0, openai_api_key=OPENAI_API_KEY)
+
     agent = initialize_agent(
         tools=[search_information, summarize_information, generate_report],
         llm=llm,
@@ -64,5 +64,6 @@ def run_agent(topic: str):
     print("\n✅ **Laporan Akhir:**\n", report)
 
 
-# 🔹 6. Contoh Penggunaan
-run_agent("Python")
+if __name__ == "__main__":
+    # Contoh Penggunaan
+    run_agent("Python")

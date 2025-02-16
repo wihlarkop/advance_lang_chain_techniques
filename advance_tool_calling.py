@@ -1,66 +1,94 @@
-import time
-import random
 from langchain.chat_models import ChatOpenAI
-from langchain.tools import tool
-from langchain.agents import initialize_agent, AgentType
+from langchain_core.messages import HumanMessage
+import json
 
 
-# 🔹 1. Tool untuk Mencari Informasi
-@tool
-def search_information(query: str) -> str:
-    """Melakukan pencarian informasi terkait query yang diberikan."""
-    if random.random() < 0.2:  # Simulasi kegagalan 20%
-        raise ValueError("Search API Error: Gagal mendapatkan hasil pencarian.")
-    return f"Hasil pencarian tentang '{query}': LangChain adalah framework AI untuk LLM."
+class CurrencyConverter:
+    def __init__(self, api_key: str):
+        # Definisi fungsi konversi mata uang
+        self.functions = [{
+            "name": "convert_currency",
+            "description": "Mengkonversi IDR ke USD atau sebaliknya",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": "number",
+                        "description": "Jumlah uang yang akan dikonversi"
+                    },
+                    "from_currency": {
+                        "type": "string",
+                        "enum": ["IDR", "USD"],
+                        "description": "Mata uang asal"
+                    },
+                    "to_currency": {
+                        "type": "string",
+                        "enum": ["IDR", "USD"],
+                        "description": "Mata uang tujuan"
+                    }
+                },
+                "required": ["amount", "from_currency", "to_currency"]
+            }
+        }]
+
+        self.llm = ChatOpenAI(
+            model="gpt-3.5-turbo-0125",
+            openai_api_key=api_key,
+            temperature=0
+        ).bind(functions=self.functions)
+
+        # Rate konversi sederhana
+        self.rates = {
+            "IDR_TO_USD": 1 / 15500,  # 1 IDR = 1/15500 USD
+            "USD_TO_IDR": 15500  # 1 USD = 15500 IDR
+        }
+
+    def convert_currency(self, amount: float, from_currency: str, to_currency: str) -> float:
+        """Melakukan konversi mata uang"""
+        if from_currency == "IDR" and to_currency == "USD":
+            return amount * self.rates["IDR_TO_USD"]
+        elif from_currency == "USD" and to_currency == "IDR":
+            return amount * self.rates["USD_TO_IDR"]
+        return amount
+
+    def process_query(self, query: str) -> str:
+        """Memproses pertanyaan pengguna"""
+        messages = [HumanMessage(content=query)]
+
+        response = self.llm.invoke(messages)
+
+        # Jika tidak ada function call, kembalikan jawaban langsung
+        if not response.additional_kwargs.get("function_call"):
+            return response.content
+
+        # Proses function call
+        function_call = response.additional_kwargs["function_call"]
+        arguments = json.loads(function_call["arguments"])
+
+        # Lakukan konversi
+        result = self.convert_currency(
+            arguments["amount"],
+            arguments["from_currency"],
+            arguments["to_currency"]
+        )
+
+        # Format hasil
+        return f"{arguments['amount']} {arguments['from_currency']} = {result:.2f} {arguments['to_currency']}"
 
 
-# 🔹 2. Tool untuk Meringkas Hasil Pencarian
-@tool
-def summarize_text(text: str) -> str:
-    """Meringkas teks panjang menjadi ringkasan singkat."""
-    if "LangChain" not in text:
-        raise ValueError("Summarization Error: Tidak ada informasi yang bisa diringkas.")
-    return "Ringkasan: LangChain adalah framework AI untuk LLM."
+# Contoh penggunaan
+if __name__ == "__main__":
+    OPENAI_API_KEY = "your-api-key"
+    converter = CurrencyConverter(OPENAI_API_KEY)
 
+    # Contoh queries
+    queries = [
+        "Berapa 100 USD dalam rupiah?",
+        "Tolong konversikan 1500000 rupiah ke dollar",
+        "Berapa nilai 50 dollar AS dalam IDR?"
+    ]
 
-# 🔹 3. Tool untuk Menerjemahkan Ringkasan
-@tool
-def translate_text(text: str, language: str) -> str:
-    """Menerjemahkan teks ke bahasa yang dipilih."""
-    translations = {
-        "id": "Ringkasan: LangChain adalah kerangka kerja AI untuk model bahasa besar.",
-        "es": "Resumen: LangChain es un framework de IA para modelos de lenguaje."
-    }
-    return translations.get(language, text)
-
-
-# 🔹 4. Retry Wrapper untuk Error Handling
-def retry_tool(tool_func, *args, retries=3, delay=2):
-    for attempt in range(retries):
-        try:
-            return tool_func(*args)
-        except Exception as e:
-            print(f"⚠️ Error: {e}. Retrying ({attempt + 1}/{retries})...")
-            time.sleep(delay)
-    print("❌ Gagal setelah beberapa kali percobaan.")
-    return "Error: Tool gagal setelah beberapa kali percobaan."
-
-
-# 🔹 5. Inisialisasi Model OpenAI
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-
-# 🔹 6. Inisialisasi Agent dengan Multiple Tools
-agent = initialize_agent(
-    tools=[search_information, summarize_text, translate_text],
-    llm=llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True
-)
-
-# 🔹 7. Menjalankan Full Toolchain dengan Error Handling dan Retries
-query = "LangChain"
-search_result = retry_tool(search_information, query)
-summary = retry_tool(summarize_text, search_result)
-translation = retry_tool(translate_text, summary, "id")
-
-print("\n✅ **Final Output:**", translation)
+    for query in queries:
+        result = converter.process_query(query)
+        print(f"\nQ: {query}")
+        print(f"A: {result}")
