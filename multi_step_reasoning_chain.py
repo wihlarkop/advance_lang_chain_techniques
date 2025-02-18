@@ -43,7 +43,7 @@ def generate_report(topic: str, summary: str) -> str:
 def run_agent(topic: str):
     # Inisialisasi Model OpenAI
     OPENAI_API_KEY = "your-api-key"
-    llm = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0, openai_api_key=OPENAI_API_KEY)
+    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
 
     agent = initialize_agent(
         tools=[search_information, summarize_information, generate_report],
