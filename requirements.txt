@@ -3,7 +3,9 @@
 aiohappyeyeballs==2.4.6
     # via aiohttp
 aiohttp==3.11.12
-    # via langchain
+    # via
+    #   langchain
+    #   langchain-community
 aiosignal==1.3.2
     # via aiohttp
 annotated-types==0.7.0
@@ -14,6 +16,8 @@ anyio==4.8.0
     #   openai
 attrs==25.1.0
     # via aiohttp
+brotli==1.1.0
+    # via httpx
 certifi==2025.1.31
     # via
     #   httpcore
@@ -21,10 +25,18 @@ certifi==2025.1.31
     #   requests
 charset-normalizer==3.4.1
     # via requests
+click==8.1.8
+    # via duckduckgo-search
 colorama==0.4.6
-    # via tqdm
+    # via
+    #   click
+    #   tqdm
+dataclasses-json==0.6.7
+    # via langchain-community
 distro==1.9.0
     # via openai
+duckduckgo-search==7.4.2
+    # via advance-lang-chain-techniques (pyproject.toml)
 frozenlist==1.5.0
     # via
     #   aiohttp
@@ -33,12 +45,21 @@ greenlet==3.1.1
     # via sqlalchemy
 h11==0.14.0
     # via httpcore
+h2==4.2.0
+    # via httpx
+hpack==4.1.0
+    # via h2
 httpcore==1.0.7
     # via httpx
 httpx==0.28.1
     # via
+    #   duckduckgo-search
     #   langsmith
     #   openai
+httpx-sse==0.4.0
+    # via langchain-community
+hyperframe==6.1.0
+    # via h2
 idna==3.10
     # via
     #   anyio
@@ -52,10 +73,15 @@ jsonpatch==1.33
 jsonpointer==3.0.0
     # via jsonpatch
 langchain==0.3.18
+    # via
+    #   advance-lang-chain-techniques (pyproject.toml)
+    #   langchain-community
+langchain-community==0.3.17
     # via advance-lang-chain-techniques (pyproject.toml)
 langchain-core==0.3.35
     # via
     #   langchain
+    #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
 langchain-openai==0.3.5
@@ -65,19 +91,30 @@ langchain-text-splitters==0.3.6
 langsmith==0.3.8
     # via
     #   langchain
+    #   langchain-community
     #   langchain-core
+lxml==5.3.1
+    # via duckduckgo-search
+marshmallow==3.26.1
+    # via dataclasses-json
 multidict==6.1.0
     # via
     #   aiohttp
     #   yarl
+mypy-extensions==1.0.0
+    # via typing-inspect
 numpy==1.26.4
-    # via langchain
+    # via
+    #   langchain
+    #   langchain-community
 openai==1.63.0
     # via langchain-openai
 orjson==3.10.15
     # via langsmith
 packaging==24.2
-    # via langchain-core
+    # via
+    #   langchain-core
+    #   marshmallow
 propcache==0.2.1
     # via
     #   aiohttp
@@ -88,17 +125,26 @@ pydantic==2.10.6
     #   langchain-core
     #   langsmith
     #   openai
+    #   pydantic-settings
 pydantic-core==2.27.2
     # via pydantic
+pydantic-settings==2.7.1
+    # via langchain-community
+python-dotenv==1.0.1
+    # via
+    #   advance-lang-chain-techniques (pyproject.toml)
+    #   pydantic-settings
 pyyaml==6.0.2
     # via
     #   langchain
+    #   langchain-community
     #   langchain-core
 regex==2024.11.6
     # via tiktoken
 requests==2.32.3
     # via
     #   langchain
+    #   langchain-community
     #   langsmith
     #   requests-toolbelt
     #   tiktoken
@@ -108,11 +154,16 @@ sniffio==1.3.1
     # via
     #   anyio
     #   openai
+socksio==1.0.0
+    # via httpx
 sqlalchemy==2.0.38
-    # via langchain
+    # via
+    #   langchain
+    #   langchain-community
 tenacity==9.0.0
     # via
     #   langchain
+    #   langchain-community
     #   langchain-core
 tiktoken==0.9.0
     # via langchain-openai
@@ -126,6 +177,9 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
+    #   typing-inspect
+typing-inspect==0.9.0
+    # via dataclasses-json
 urllib3==2.3.0
     # via requests
 yarl==1.18.3
