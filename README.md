@@ -27,6 +27,8 @@
 
 ## Usage
 
+create the .env file and put your `OPENAI_API_KEY` in there or you can rename .env-example and to .env and put your key in there
+
 1. Run the script:
     ```sh
     python file_name.py
