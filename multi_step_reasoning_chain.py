@@ -58,16 +58,18 @@ def run_agent(topic: str):
 
     # 1️⃣ Cari informasi berdasarkan topik
     info = agent.run(f"Cari informasi tentang {topic}")
+    print("Info: \n", info)
 
     # 2️⃣ Ringkas informasi yang ditemukan
     summary = agent.run(f"Ringkas informasi berikut: {info}")
+    print("Summary: \n", summary)
 
     # 3️⃣ Buat laporan akhir
     report = agent.run(f"Buat laporan berdasarkan topik {topic} dan ringkasan {summary}")
 
-    print("\n✅ **Laporan Akhir:**\n", report)
+    print("Laporan Akhir:\n", report)
 
 
 if __name__ == "__main__":
     # Contoh Penggunaan
-    run_agent("Python")
+    run_agent("Blockchain")

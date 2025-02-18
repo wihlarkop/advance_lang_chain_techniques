@@ -84,4 +84,4 @@ if __name__ == "__main__":
     run_agent("Hitung 25 * 4 + 10")
 
     print("\n=== Example 3: General Question ===")
-    run_agent("Ceritakan tentang sejarah Jepang.")
+    run_agent("Ceritakan tentang apa itu large language model?")
