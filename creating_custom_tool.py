@@ -1,6 +1,10 @@
+import os
+
+from dotenv import load_dotenv
 from langchain.tools import tool
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import AgentType, initialize_agent
+
 
 # 🔹 Fungsi Custom dengan @tool
 @tool
@@ -14,8 +18,10 @@ def hitung_luas_persegi(sisi: str) -> str:
     except ValueError:
         return "ERROR: Masukkan angka yang valid untuk sisi."
 
+
 # 🔹 Inisialisasi Model
-OPENAI_API_KEY = "your-api-key"
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
 
 # 🔹 Inisialisasi Agent

@@ -1,10 +1,13 @@
+import os
 
+from dotenv import load_dotenv
 from langchain.tools import DuckDuckGoSearchRun, Tool
 from langchain.agents import initialize_agent, AgentType
 from langchain.llms import OpenAI
 
 # Inisialisasi model LLM
-OPENAI_API_KEY = "your-api-key"
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 
 # Inisialisasi search tool

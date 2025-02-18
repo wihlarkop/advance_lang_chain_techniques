@@ -1,3 +1,6 @@
+import os
+
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.tools import tool
 from langchain.agents import initialize_agent, AgentType
@@ -42,7 +45,8 @@ def generate_report(topic: str, summary: str) -> str:
 # Chain: Pencarian → Ringkasan → Laporan
 def run_agent(topic: str):
     # Inisialisasi Model OpenAI
-    OPENAI_API_KEY = "your-api-key"
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
 
     agent = initialize_agent(

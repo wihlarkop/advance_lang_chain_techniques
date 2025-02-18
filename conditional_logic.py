@@ -1,3 +1,6 @@
+import os
+
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.tools import tool
 from langchain.agents import initialize_agent, AgentType
@@ -52,7 +55,8 @@ def select_tool(user_input: str):
 
 # Eksekusi Agent dengan Routing Dinamis
 def run_agent(user_input: str):
-    OPENAI_API_KEY = "your-api-key"
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
     # Inisialisasi Model OpenAI
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)

@@ -15,6 +15,7 @@ dependencies = [
     { name = "langchain" },
     { name = "langchain-community" },
     { name = "langchain-openai" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -23,6 +24,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=0.3.18" },
     { name = "langchain-community", specifier = ">=0.3.17" },
     { name = "langchain-openai", specifier = ">=0.3.5" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
 ]
 
 [[package]]

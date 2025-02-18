@@ -1,10 +1,14 @@
+import os
+
+from dotenv import load_dotenv
 from langchain.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import SequentialChain, LLMChain
 import json
 
 # API Key
-OPENAI_API_KEY = "your-api-key"
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Inisialisasi model
 llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)

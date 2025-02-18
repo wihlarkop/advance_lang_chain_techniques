@@ -1,9 +1,13 @@
+import os
+
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
-OPENAI_API_KEY = ""
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
 search_tool = DuckDuckGoSearchRun()
